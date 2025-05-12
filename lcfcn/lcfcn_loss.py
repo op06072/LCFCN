@@ -125,6 +125,8 @@ def watersplit(_probs, _points):
     points = points.astype(float)
 
     probs = ndimage.black_tophat(_probs.copy(), 7)
+    print(probs)
+    print(points)
     seg = watershed(probs, points)
 
     return find_boundaries(seg)
