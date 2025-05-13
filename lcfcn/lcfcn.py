@@ -130,7 +130,8 @@ class LCFCN(torch.nn.Module):
         pred_count = pred_counts.ravel()[0]
         pred_blobs = pred_blobs.squeeze()
         pred_points = lcfcn_loss.blobs2points(pred_blobs).squeeze()
-        img_org = hu.get_image(batch["images"],denorm="rgb")
+        # img_org = hu.get_image(batch["images"],denorm="rgb")
+        img_org = denormalize_image(batch["images"])
 
         i1 = convert(np.array(img_org), batch['points'][0], enlarge=20)
         i2 = convert(np.array(img_org), pred_blobs, enlarge=0)
@@ -161,3 +162,13 @@ def transform_image(image):
             transforms.Normalize(mean=mean, std=std)
         ])
     return transform(image)
+
+def denormolize_image(image):
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
+
+    ten = image.clone().permute(1, 2, 3, 0)
+    for t, m, s in zip(ten, mean, std):
+        t.mul_(s).add_(m)
+    # B, 3, H, W
+    return torch.clamp(ten, 0, 1).permute(3, 0, 1, 2)
