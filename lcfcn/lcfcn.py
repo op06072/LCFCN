@@ -163,7 +163,7 @@ def transform_image(image):
         ])
     return transform(image)
 
-def denormolize_image(image):
+def denormalize_image(image):
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
 
