@@ -122,7 +122,8 @@ def watersplit(_probs, _points):
     points = _points.copy()
 
     points[points != 0] = np.arange(1, points.sum()+1)
-    points = points.astype(float)
+    # points = points.astype(float)
+    points = points.astype(np.int64)
 
     probs = ndimage.black_tophat(_probs.copy(), 7)
     print(probs)
